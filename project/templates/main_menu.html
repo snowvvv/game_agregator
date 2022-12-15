@@ -68,6 +68,7 @@
    color: #444444;
    margin: 0 0 10px 0;
 }
+.img{ max-width: 100%; height: auto; display: block; }
 .price {
    font-size: 16px;
    color: #fc5a5a;
@@ -98,7 +99,7 @@
 
     <div class="product-item position-relative" >
         <a href="/buy/{{el.id}}" class=" stretched-link" ></a>
-      <img src="/static/images/{{el.id}}.png">
+      <img class="img" src="/static/images/{{el.id}}.png">
       <div class="product-list">
         <h3>{{ el.title}}</h3>
           <span class="price">₽ {{el.price}}</span>

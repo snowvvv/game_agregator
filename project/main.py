@@ -72,6 +72,8 @@ def offer_post():
         db.session.add(new_item)
         db.session.commit()
     return redirect(url_for('main.profile'))
+
+
 # else:
 #  flash("Заполните все поля (в том числе добавьте картинку)")
 #   return redirect(url_for('main.offer'))
@@ -162,8 +164,10 @@ def buy(id):
             setattr(item, 'buyer', current_user.name)
 
             db.session.commit()
-            send_email(email, f"Ваша ставка зарегистрирована! Товар {item.title} будет доступен по цене {item.price} "
-                              f" через {final_delta}")
+            if email is not None:
+                send_email(email,
+                           f"Ваша ставка зарегистрирована! Товар {item.title} будет доступен по цене {item.price} "
+                           f" через {final_delta}")
 
         else:
             flash("Я все понимаю, но цена должна быть больше стартовой")
@@ -202,7 +206,8 @@ def change(num):
     description = request.form.get('description')
     item = Item.query.filter_by(id=num).first()
 
-    new_item = Item(id=item.id, title=title, price=price, final_date=final_date, description=description, user=current_user)
+    new_item = Item(id=item.id, title=title, price=price, final_date=final_date, description=description,
+                    user=current_user)
     if item in items_id:
         db.session.delete(item)
         db.session.add(new_item)

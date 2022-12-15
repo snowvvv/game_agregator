@@ -3,4 +3,4 @@ import project
 myapp = project.create_app()
 
 if __name__ == "__main__":
-    myapp.run(debug=False)
+    myapp.run(debug=True)
