@@ -15,20 +15,17 @@
 
 <div class="control ">
 
-    <h1></h1><strong> Добавление товара</strong></h1>
+    <h1></h1><strong>Создание поста</strong></h1>
 
     <form method="POST" enctype="multipart/form-data">
-        <input type="text" class="form-control" name="title" id="title" placeholder="Название товара" value="{{data.title}}"  >
+        <input type="text" class="form-control" name="title" id="title" placeholder="Заголовок поста" value="{{data.title}}"  >
         <br><br>
 
-        <input class="form-control" name="description" id="description" placeholder="Введите описание товара"  value="{{data.description}}">
+        <input class="form-control" name="description" id="description" placeholder="Подробное описание"  value="{{data.description}}">
         <br><br>
-         <input type="price" class="form-control" name="price" id="price" placeholder="Начальная цена товара (руб)"  value="{{data.price}}">
+         <input type="price" class="form-control" name="price" id="price" placeholder="Ключевые слова"  value="{{data.price}}">
         <br><br>
-            <h6> Введите дату окончания аукциона</h6>
-         <input type="date" name="final_date" id="final_date" value="{{data.final_date}}"
-                        max="2023-06-04" min="2022-06-14">
-        <br><br>
+
 
         <a class="button" href="/uploads/{{data.id}}">Добавьте изображение товара</a>
 

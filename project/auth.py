@@ -42,6 +42,8 @@ def signup_post():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
+    discord = request.form.get('discord')
+    steam = request.form.get('steam')
 
     user = User.query.filter_by(email=email).first()  # Если это возвращает юзера, то значит маил уже есть в базе
 
@@ -52,7 +54,13 @@ def signup_post():
         flash('Пожалуйста заполните все поля')
         return redirect(url_for('auth.signup'))
 
-    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
+    new_user = User(
+        email=email,
+        name=name,
+        password=generate_password_hash(password, method='sha256'),
+        discord=discord,
+        steam=steam
+    )
 
     # добавление пользователя в базу
     db.session.add(new_user)

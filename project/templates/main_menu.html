@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="column is-4 is-offset-4">
-    <h3 class="title">Лоты</h3>
+    <h3 class="title">Поиск напарников</h3>
     <br>
 
         {% with messages = get_flashed_messages() %}
@@ -98,18 +98,21 @@
 {% for el in data %}
 
     <div class="product-item position-relative" >
-        <a href="/buy/{{el.id}}" class=" stretched-link" ></a>
+        <a href="/info/{{el.id}}" class=" stretched-link" ></a>
       <img class="img" src="/static/images/{{el.id}}.png">
       <div class="product-list">
         <h3>{{ el.title}}</h3>
-          <span class="price">₽ {{el.price}}</span>
-          <a href="/buy/{{el.id}}" class="button " style="position: relative;">Купить</a>
+          <span class="price"> {{el.price}}</span>
+          <a href="/info/{{el.id}}" class="button" style="position: relative;">Подробней</a>
 
       </div>
      </div>
 
 {% endfor %}
-
+ <form>
+   <p><input type="search" name="q" placeholder="Поиск по сайту">
+   <input type="submit" value="Найти" name="search"></p>
+  </form>
 
    <!--{%for el in data %}
               <a href="/offer/zoloto_56_proba_prekrasnejshie_sergi_s_nebesno_goluboj_prirodnoj_birjuzoj_ves_5_26_gramm-i224689509794582.html" class="carousel__item__photo ">

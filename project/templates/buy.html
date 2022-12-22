@@ -20,15 +20,14 @@
     <br>
     <div> Описание:     {{data.description}}</div>
     <br>
-        <div> Текущая цена =  {{data.price}}  ₽ </div>
+        <div> Ключевые слова - {{data.tag}}   </div>
     <br>
-    <form method="POST" action="/buy/{{data.id}}">
-    <input type="price" class="form-control" name="price" id="price" value="{{data.price + 500}}" >
+    <form method="POST" action="/info/{{data.id}}">
+
         <br>
-        <input class="form-control" name="email" id="email" placeholder="Введите почту для отправки уведомлений!!!" >
+
     <br><br>
-        <input action="/buy/{{data.id}}" value="Сделать ставку" type=submit class="button is-info" name="bet">
-        <a href="https://yoomoney.ru/quickpay/button-widget?targets=%D0%9E%D0%BF%D0%BB%D0%B0%D1%82%D0%B0%20%D1%82%D0%BE%D0%B2%D0%B0%D1%80%D0%B0&default-sum={{data.price * 3}}&button-text=11&any-card-payment-type=on&button-size=m&button-color=white&successURL=http%3A%2F%2Fsnoq.pythonanywhere.com%2F&quickpay=small&account=410015112289259&" onclick="" value="Выкупить сразу за {{data.price * 3}}" type=submit class="button is-info "> Выкупить сразу за {{data.price * 3}}</a>
+        <input action="/info/{{data.id}}" value="Откликнуться" type=submit class="button is-info" name="bet">
 
         <br><br>
 
@@ -36,8 +35,8 @@
         </form>
 
     <br>
-    <h1> Ставка принадлежит: {{data.buyer}}</h1>
-    <div> Кстати, лот закрывается через {{dt}}</div>
+    <h1> Последний откликнувшийся: {{data.buyer}}</h1>
+
 </div>
 
 
