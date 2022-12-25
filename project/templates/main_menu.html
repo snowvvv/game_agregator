@@ -102,17 +102,18 @@
       <img class="img" src="/static/images/{{el.id}}.png">
       <div class="product-list">
         <h3>{{ el.title}}</h3>
-          <span class="price"> {{el.price}}</span>
+          <span class="tag"> {{el.tag}}</span>
           <a href="/info/{{el.id}}" class="button" style="position: relative;">Подробней</a>
 
       </div>
      </div>
 
 {% endfor %}
- <form>
-   <p><input type="search" name="q" placeholder="Поиск по сайту">
-   <input type="submit" value="Найти" name="search"></p>
-  </form>
+<form>
+   <p><input type="search" name="q" placeholder="Поиск по тегу">
+   <a class="button" href="/search-result/pubg">Найти</a></p>
+</form>
+
 
    <!--{%for el in data %}
               <a href="/offer/zoloto_56_proba_prekrasnejshie_sergi_s_nebesno_goluboj_prirodnoj_birjuzoj_ves_5_26_gramm-i224689509794582.html" class="carousel__item__photo ">

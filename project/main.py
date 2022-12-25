@@ -43,15 +43,25 @@ def index():
     return render_template('index.html')
 
 
-@main.route('/search-teammates')
+@main.route('/search-teammates', methods=['POST'])
 @login_required
 def search_teammates():
+    q = request.form.get('search')
+    return redirect(url_for('main.f_search_teammates', tag=q))
+
+
+@main.route('/search-teammates', methods=['GET'])
+@login_required
+def search_teammates_get():
     posts = Post.query.all()
-    if request.form.get('q'):
-        q = request.form.get('q')
-        f_posts = Post.query.filter_by(tag=q)
-        return render_template('main_menu.html', data=f_posts)
     return render_template('main_menu.html', data=posts)
+
+
+@main.route('/search-result/<tag>')
+@login_required
+def f_search_teammates(tag):
+    f_posts = Post.query.filter_by(tag=tag)
+    return render_template('main_menu.html', data=f_posts)
 
 
 @main.route('/create-post', methods=['POST'])
@@ -204,7 +214,7 @@ def allowed_file(filename):
 
 @main.route('/uploads/<int:id>', methods=['GET', 'POST'])
 def upload_file(id):
-    item = Item.query.filter_by(id=id).first()
+    post = Post.query.filter_by(id=id).first()
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -216,7 +226,7 @@ def upload_file(id):
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        if file and allowed_file(file.filename) and item.user_id == current_user.id:
+        if file and allowed_file(file.filename) and post.user_id == current_user.id:
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, str(id) + ".png"))
             return redirect(url_for('main.index'))
