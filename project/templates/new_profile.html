@@ -1,0 +1,27 @@
+{% extends "new_base.html" %}
+
+{% block content %}
+<div style="margin-top: 150px">
+<h3>Профиль</h3>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div class="notification">
+        {{ messages[0] }}
+    </div>
+{% endif %}
+{% endwith %}
+<div class="search-form">
+    <div>
+        <a href="{{ url_for('main.create_post') }}" class="a-profile">
+            <button class="button-profile">Создать пост на поиск напарника
+            </button>
+        </a>
+    </div>
+    <div>
+      <a href="{{ url_for('main.own_posts') }}" class="a-profile">
+          <button class="button-profile">Мои посты
+          </button>
+      </a>
+    </div>
+</div>
+{% endblock %}

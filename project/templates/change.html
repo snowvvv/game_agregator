@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="column is-4 is-offset-4">
-    <h3 class="title">Редактирование лота</h3>
+    <h3 class="title">Редактирование поста</h3>
     <div class="box">
         {% with messages = get_flashed_messages() %}
 {% if messages %}
@@ -14,9 +14,6 @@
 
 
 <div class="control ">
-
-    <h1></h1><strong>Создание поста</strong></h1>
-
     <form method="POST" enctype="multipart/form-data">
         <input type="text" class="form-control" name="title" id="title" placeholder="Заголовок поста" value="{{data.title}}"  >
         <br><br>
@@ -27,7 +24,7 @@
         <br><br>
 
 
-        <a class="button" href="/uploads/{{data.id}}">Добавьте изображение товара</a>
+        <a class="button" href="/uploads/{{data.id}}">Добавьте любое изображение</a>
 
 
 

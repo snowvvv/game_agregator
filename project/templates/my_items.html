@@ -84,10 +84,10 @@
       <img src="/static/images/{{el.id}}.png" width="200" height="150">
       <div class="product-list">
         <h3>{{ el.title}}</h3>
-          <span class="price">₽ {{el.price}}</span>
+          <span class="price">{{el.tag}}</span>
 
           <a href="/change/{{el.id}}" class="button " style="position: relative;">Редактировать</a>
-          <<a href="/delete/{{el.id}}" class="button " style="position: relative;">Удалить</a>
+          <a href="/delete/{{el.id}}" class="button " style="position: relative;">Удалить</a>
       </div>
     </div>
 {% endfor %}

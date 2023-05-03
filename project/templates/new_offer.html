@@ -1,0 +1,31 @@
+{% extends "new_base.html" %}
+
+{% block content %}
+<div style="margin-top: 100px">
+<h3>Создание поста</h3>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div class="notification">
+        {{ messages[0] }}
+    </div>
+{% endif %}
+{% endwith %}
+<div class="site-form">
+  <form method="POST" action="/create-post" enctype="multipart/form-data">
+    <div class="form-field">
+      <input class="form-input" type="text" name="title" id="title" placeholder="Заголовок поста">
+    </div>
+    <div class="form-field">
+      <input class="form-input" name="description" id="description" placeholder="Описание поста">
+    </div>
+    <div class="form-field">
+      <input class="form-input" name="tag" id="tag" placeholder="Название игры">
+    </div>
+    <div>
+        <a class="button-upload" href="/uploads/{{data}}">Добавьте любое изображение</a>
+    </div>
+    <button class="button-form">Создать пост</button>
+  </form>
+</div>
+</div>
+{% endblock %}

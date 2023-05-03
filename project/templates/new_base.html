@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>GamersAggergator</title>
+
+	<!-- Bootstrap reboot (для сброса стилей) -->
+	<link rel="stylesheet" href="libs/bootstrap-reboot.min.css">
+
+	<!-- Bootstrap сетка -->
+	<link rel="stylesheet" href="libs/bootstrap-grid.min.css">
+
+	<!-- Шрифты с Google Fonts -->
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Dela Gothic One' rel='stylesheet'>
+
+	<!-- Стили сайта -->
+	<style>
+		/**
+ * Базовые стили для всего сайта
+ */
+body {
+	position: relative;
+	font-family: 'Dela Gothic One', sans-serif;
+	font-style: normal;
+	font-size: 16px;
+	line-height: 1.4;
+	color: #000;
+	min-width: 320px;
+	overflow-x: hidden;
+	height: auto;
+}
+
+/**
+ * Другие стили
+ */
+.navbar {
+	width: 100%;
+	height: 70px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
+	border-bottom: 2px solid #41B7FB;
+}
+
+.navbar .container {
+	height: inherit;
+	display: flex;
+	justify-content: space-between;
+	text-align: center;
+}
+
+.navbar-menu {
+	list-style-type: none;
+	padding-left: 0;
+	margin-bottom: 0;
+}
+
+.navbar-menu li {
+	display: inline-block;
+}
+
+.navbar-menu li a {
+	display: inline-block;
+	color: #ffffff;
+	text-decoration: none;
+	padding: 6px;
+	transition: all .07s ease-in-out;
+}
+
+.navbar-menu li a:hover {
+	color: #41B7FB;
+}
+
+.navbar-brand {
+	font-weight: 700;
+	font-size: 26px;
+	text-decoration: none;
+	color: #41B7FB;
+	padding: 14px;
+	margin-top: -12px;
+}
+
+.navbar-name {
+	font-weight: 200;
+	font-size: 16px;
+	padding: 8px;
+	color: #4185fb;
+}
+
+.title {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 15%;
+}
+
+.title h1 {
+	color: #41B7FB;
+}
+
+.title h2 {
+	color: #41B7FB;
+	font-size: 18px;
+}
+
+h3 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: #41B7FB;
+}
+
+h4 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: #41B7FB;
+}
+
+.post-tag {
+	color: #4185fb;
+}
+
+.search-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.post-box {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.post-border {
+	border: 2px solid #41B7FB;
+	border-radius: 7px;
+	margin: 10px;
+}
+
+.image-post {
+	border-radius: 7px;
+}
+
+.post-bottom {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px;
+}
+
+.info-but {
+	text-decoration: none;
+	display: inline-block;
+   padding: 0 12px;
+   background: #4185fb;
+   color: white;
+   text-transform: uppercase;
+   font-size: 12px;
+   line-height: 28px;
+	border-radius: 5px;
+   transition: .07s ease-in;
+}
+
+.info-but:hover {
+	color: #171717;
+}
+
+.button-search {
+	text-decoration: none;
+	display: inline-block;
+   padding: 0 12px;
+   background: #4185fb;
+   color: white;
+   text-transform: uppercase;
+   font-size: 10px;
+   line-height: 22px;
+   transition: .07s ease-in;
+	border-radius: 5px;
+	border: 0;
+}
+
+.button-form {
+	text-decoration: none;
+	margin: 0 auto;
+	display: block;
+	margin-top: 5px;
+	margin-bottom: 8px;
+   padding: 0 12px;
+   background: #4185fb;
+   color: white;
+   text-transform: uppercase;
+   font-size: 14px;
+   line-height: 22px;
+   transition: .07s ease-in;
+	border-radius: 5px;
+	border: 0;
+	text-align: center;
+	width: 200px;
+	height: 25px;
+}
+
+.button-form:hover {
+	color: #171717;
+}
+
+.button-profile {
+	text-decoration: none;
+	margin: 0 auto;
+	display: block;
+	margin-top: 5px;
+	margin-bottom: 8px;
+   padding: 0 12px;
+   background: #4185fb;
+   color: white;
+   text-transform: uppercase;
+   font-size: 14px;
+   line-height: 22px;
+   transition: .07s ease-in;
+	border-radius: 5px;
+	border: 0;
+	text-align: center;
+	width: 400px;
+	height: 25px;
+}
+
+.button-profile:hover {
+	color: #171717;
+}
+
+.button-upload {
+	text-decoration: none;
+	margin: 0 auto;
+	display: block;
+	margin-top: 5px;
+	margin-bottom: 8px;
+   padding: 0 12px;
+   background: #4185fb;
+   color: white;
+   text-transform: uppercase;
+   font-size: 14px;
+   line-height: 22px;
+   transition: .07s ease-in;
+	border-radius: 5px;
+	border: 0;
+	text-align: center;
+	width: 350px;
+	height: 25px;
+}
+
+.button-upload:hover {
+	color: #171717;
+}
+
+img {
+	border-radius: 5px;
+}
+
+.site-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.site-form form {
+	border: 2px solid #41B7FB;
+	border-radius: 7px;
+}
+
+.form-field {
+	padding: 8px;
+}
+
+.form-input {
+	border-radius: 3px;
+	border: 0;
+	width: 400px;
+	height: 50px;
+	font-size: 26px;
+	background-color: #606060;
+	color: white;
+	padding: 4px;
+
+}
+
+.form-input-1 {
+	border-radius: 3px;
+	border: 0;
+	width: 400px;
+	height: 50px;
+	font-size: 26px;
+	background-color: #606060;
+	color: white;
+	padding: 4px;
+
+}
+
+.form-input-2 {
+	border-radius: 3px;
+	border: 0;
+	width: 400px;
+	height: 50px;
+	font-size: 26px;
+	background-color: #606060;
+	color: white;
+	padding: 4px;
+
+}
+
+.form-input-3 {
+	border-radius: 3px;
+	border: 0;
+	width: 400px;
+	height: 50px;
+	font-size: 26px;
+	background-color: #606060;
+	color: white;
+	padding: 4px;
+
+}
+
+.notification {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 10px;
+	color: white;
+}
+
+.a-profile {
+	text-decoration: none;
+}
+
+	</style>
+</head>
+<body style="background-color: #171717">
+   <header>
+	<nav class="navbar">
+      <div class="container">
+        <a href="{{ url_for('main.index') }}" class="navbar-brand">
+			<img src="static/images/GA.png" width=100 alt="">
+		</a>
+
+		<h1 class="navbar-name"><strong> {{current_user.name}} </strong></h1>
+		<h2 class="navbar-name"> {{current_user.email}} </h2>
+
+		<ul class="navbar-menu">
+			{% if current_user.is_authenticated %}
+			<li><a href="{{ url_for('main.profile') }}">Профиль</a></li>
+			<li><a href="{{ url_for('main.search_teammates') }}">Поиск напарников</a></li>
+			<li><a href="{{ url_for('main.check_fps') }}">Проверка производительности</a></li>
+			{% endif %}
+			{% if not current_user.is_authenticated %}
+			<li><a href="{{ url_for('auth.login') }}">Войти</a></li>
+			<li><a href="{{ url_for('auth.signup') }}">Зарегистрироваться</a></li>
+			{% endif %}
+			{% if current_user.is_authenticated %}
+			<li><a href="{{ url_for('auth.logout') }}">Выйти</a></li>
+			{% endif %}
+		</ul>
+      </div>
+    </nav>
+   </header>
+   <main>
+	   {% block content %}
+	   {% endblock %}
+   </main>
+</body>
+</html>

@@ -4,7 +4,7 @@ from flask_login import LoginManager
 
 db = SQLAlchemy()
 
-UPLOAD_FOLDER = r'D:\Pycharms projects\flask_project_5\project\static\images'
+UPLOAD_FOLDER = r'/Users/grigorijsvalev/PycharmProjects/game_agregator/project/static/images'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 

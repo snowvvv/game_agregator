@@ -12,7 +12,7 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 
 from . import db
-from .models import User, Item, Post
+from .models import User, Post, Setup
 from . import UPLOAD_FOLDER, ALLOWED_EXTENSIONS
 
 main = Blueprint('main', __name__)
@@ -40,33 +40,25 @@ def send_email(addr_to, body):
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('new_index.html')
 
 
-@main.route('/search-teammates', methods=['POST'])
+@main.route('/search-teammates')
 @login_required
 def search_teammates():
-    q = request.form.get('search')
-    return redirect(url_for('main.f_search_teammates', tag=q))
-
-
-@main.route('/search-teammates', methods=['GET'])
-@login_required
-def search_teammates_get():
-    posts = Post.query.all()
-    return render_template('main_menu.html', data=posts)
-
-
-@main.route('/search-result/<tag>')
-@login_required
-def f_search_teammates(tag):
-    f_posts = Post.query.filter_by(tag=tag)
-    return render_template('main_menu.html', data=f_posts)
+    q = request.args.get('q')
+    if q:
+        posts = Post.query.filter(Post.tag.contains(f'{q}'))
+    else:
+        posts = Post.query.all()
+    return render_template('new_search_teammates.html', data=posts)
 
 
 @main.route('/create-post', methods=['POST'])
 @login_required
 def create_post():
+    id = Post.query.all()
+    my_id = len(id) + 1
     title = request.form.get('title')
     description = request.form.get('description')
     tag = request.form.get('tag')
@@ -75,26 +67,28 @@ def create_post():
     #     flash("Заполните все поля")
     #     return redirect(url_for('main.create-post'))
 
-    new_post = Post(title=title, description=description, user_id=current_user.id, tag=tag)
+    new_post = Post(id=my_id, title=title, description=description, user_id=current_user.id, tag=tag)
     if os.path.exists(f'static/images/{new_post.id}.png'):
         db.session.add(new_post)
         db.session.commit()
     else:
         db.session.add(new_post)
         db.session.commit()
-    return redirect(url_for('main.profile'))
+    return render_template('new_profile.html', data=my_id)
 
 
 @main.route('/create-post', methods=['GET'])
 @login_required
 def post():
-    return render_template('offer.html')
+    id = Post.query.all()
+    my_id = len(id) + 1
+    return render_template('new_offer.html', data=my_id)
 
 
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html')
+    return render_template('new_profile.html')
 
 
 @main.route('/own')
@@ -104,7 +98,7 @@ def own_posts():
         post = Post.query.all()
     else:
         post = Post.query.filter_by(user_id=current_user.id)
-    return render_template('my_items.html', data=post)
+    return render_template('new_my_items.html', data=post)
 
 
 @main.route('/info/<int:id>', methods=['GET', 'POST'])
@@ -119,17 +113,18 @@ def info(id):
                        f"Найден тиммейт! \n" 
                        f" Его Discord - {current_user.discord}. Его Steam - {current_user.steam}. \n"
                        f" Удачной игры!")
-
-        return redirect('/')
+        setattr(post, 'responded_user', current_user.name)
+        db.session.commit()
+        return redirect('/search-teammates')
     else:
-        return render_template('buy.html', data=post, pic=f'/static/images/{post.id}.png')
+        return render_template('new_info.html', data=post, pic=f'/static/images/{post.id}.png')
 
 
 @main.route('/change/<int:num>', methods=['GET'])
 @login_required
 def change_get(num):
     post = Post.query.filter_by(id=num).first()
-    return render_template("change.html", data=post)
+    return render_template("new_change.html", data=post)
 
 
 @main.route('/change/<int:num>', methods=['POST'])
@@ -149,7 +144,7 @@ def change(num):
         db.session.delete(post)
         db.session.add(new_post)
         db.session.commit()
-        return redirect('/')
+        return redirect('/own')
 
     else:
         flash('У вас нет доступа к чужим постам')
@@ -171,40 +166,7 @@ def delete(num):
         return redirect('/profile')
     else:
         flash('Вам не принадлежит этот пост. Возможно произошла ошибка')
-    return redirect('/profile')
-
-
-# @main.route('/offer', methods=['POST'])
-# def offer_post():
-#     title = request.form.get('title')
-#     price = request.form.get('price')
-#     final_date = request.form.get('final_date')
-#     description = request.form.get('description')
-#
-#     if len(title) < 1 or len(price) < 1 or len(final_date) < 1 or int(price) < 0:
-#         flash("Заполните все поля")
-#         return redirect(url_for('main.offer'))
-#
-#     new_item = Item(title=title, price=price, final_date=final_date, user=current_user, description=description)
-#     if os.path.exists(f'static/images/{new_item.id}.png'):
-#         db.session.add(new_item)
-#         db.session.commit()
-#     else:
-#         db.session.add(new_item)
-#         db.session.commit()
-#     return redirect(url_for('main.profile'))
-
-
-# else:
-#  flash("Заполните все поля (в том числе добавьте картинку)")
-#   return redirect(url_for('main.offer'))
-# return redirect(url_for('main.profile'))
-
-
-# @main.route('/offer', methods=['GET'])
-# @login_required
-# def offer():
-#     return render_template('offer.html')
+    return redirect('/own')
 
 
 def allowed_file(filename):
@@ -226,11 +188,13 @@ def upload_file(id):
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        if file and allowed_file(file.filename) and post.user_id == current_user.id:
+        if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, str(id) + ".png"))
-            return redirect(url_for('main.index'))
-
+            if post == None:
+                return redirect(url_for('main.create_post'))
+            else:
+                return redirect(url_for('main.index'))
     return '''
        <!doctype html>
        <title>Загрузите файл</title>
@@ -247,106 +211,56 @@ def uploaded_file(name):
     return send_from_directory(UPLOAD_FOLDER, name)
 
 
-# @main.route('/own')
-# def own_lots():
-#     if current_user.email == config["Admin"]["email"]:
-#         item = Item.query.all()
-#     else:
-#         item = Item.query.filter_by(user_id=current_user.id)
-#     return render_template('my_items.html', data=item)
-
-
-# @main.route('/buy/<int:id>', methods=['GET', 'POST'])
-# @login_required
-# def buy(id):
-#     email = request.form.get('email')
-#     item = Item.query.filter_by(id=id).first()
-#
-#     api = Api(merchant_id=1396424,
-#               secret_key='test')
-#     checkout = Checkout(api=api)
-#     data = {
-#         "currency": "RUB",
-#         "amount": str(item.price * 3) + '00'
-#     }
-#     url = checkout.url(data).get('checkout_url')
-#
-#     dt = str(datetime.fromisoformat(item.final_date))[:-3]
-#     delta = datetime(int(dt[0:4]), int(dt[5:7]), int(dt[8:10])) - datetime.now()
-#     final_delta = str(delta.days) + " дней ", str(delta.seconds // 3600) + " часов ", str(
-#         (delta.seconds // 60) % 60) + " минут ", str(delta.seconds % 60) + " секунд "
-#     final_delta = ''.join(final_delta)
-#     if request.method == "POST" and request.form.get('bet'):
-#
-#         new_price = request.form.get('price')
-#         mail = request.form.get('mail')
-#         if int(new_price) > item.price:
-#             setattr(item, 'price', new_price)
-#             setattr(item, 'buyer', current_user.name)
-#
-#             db.session.commit()
-#             if email is not None:
-#                 send_email(email,
-#                            f"Найден тиммейт! \n"
-#                            f" Его Discord - {current_user.discord}. Его Steam - {current_user.steam}. \n"
-#                            f" Удачной игры!")
-#
-#         else:
-#             flash("Я все понимаю, но цена должна быть больше стартовой")
-#
-#         return redirect('/')
-#     else:
-#
-#         dts = dt[8:10] + '-' + dt[5:7] + '-' + dt[0:4] + "  00:00"
-#         return render_template('buy.html', data=item, dt=final_delta, url=url, pic=f'/static/images/{item.id}.png')
-
-
-# @main.route('/change/<int:num>', methods=['GET'])
-# @login_required
-# def change_get(num):
-#     item = Item.query.filter_by(id=num).first()
-#     return render_template("change.html", data=item)
-
-
-# @main.route('/change/<int:num>', methods=['POST'])
-# @login_required
-# def change(num):
-#     if current_user.email == config["Admin"]["email"]:
-#         items_id = Item.query.all()
-#     else:
-#         items_id = Item.query.filter_by(user_id=current_user.id).all()
-#     title = request.form.get('title')
-#     price = request.form.get('price')
-#     final_date = request.form.get('final_date')
-#     description = request.form.get('description')
-#     item = Item.query.filter_by(id=num).first()
-#
-#     new_item = Item(id=item.id, title=title, price=price, final_date=final_date, description=description,
-#                     user=current_user)
-#     if item in items_id:
-#         db.session.delete(item)
-#         db.session.add(new_item)
-#         db.session.commit()
-#         return redirect('/')
-#
-#     else:
-#         flash('У вас нет доступа к чужим объявлениям')
-#         return redirect(url_for("main.profile"))
-
-
-# @main.route('/delete/<int:num>')
-# @login_required
-# def delete(num):
-#     if current_user.email == config["Admin"]["email"]:
-#         items_id = Item.query.all()
-#     else:
-#         items_id = Item.query.filter_by(user_id=current_user.id).all()
-#     item = Item.query.filter_by(id=num).first()
-#
-#     if item in items_id:
-#         db.session.delete(item)
-#         db.session.commit()
-#         return redirect('/profile')
-#     else:
-#         flash('Вам не принадлежит этот товар. Возможно произошла ошибка')
-#     return redirect('/profile')
+@main.route('/check-fps', methods=['GET', 'POST'])
+def check_fps():
+    setup = Setup.query.all()
+    if request.method == 'POST':
+        game = request.form.get('game')
+        CPU = request.form.get('CPU')
+        GPU = request.form.get('GPU')
+        CPU_id = Setup.query.filter_by(CPU=CPU).first()
+        GPU_id = Setup.query.filter_by(GPU=GPU).first()
+        if game == 'CS GO':
+            if CPU_id.id <= 200 and GPU_id.id <= 200:
+                return render_template('check_fps.html',result='Ваш пк реально тянет!'
+                                                                ' Вам гарантировано 60+ fps при разрешении FullHD ', data=setup)
+            elif CPU_id.id > 200 and GPU_id.id > 200:
+                return render_template('check_fps.html', result='Ваш пк ниже минимальных системных требований,'
+                                                                ' скорее всего игра будет нестабильна', data=setup)
+        elif game == 'DOTA 2':
+            if CPU_id.id <= 200 and GPU_id.id <= 200:
+                return render_template('check_fps.html', result='Ваш пк реально тянет!'
+                                                                ' Вам гарантировано 60+ fps при разрешении FullHD ', data=setup)
+            if 300 >= CPU_id.id > 200 and 300 >= GPU_id.id > 200:
+                return render_template('check_fps.html',
+                                       result='Ваш пк выше минимальных требований игры, 30 fps при разрешении FullHd', data=setup)
+        elif game == 'Genshin Impact':
+            if 230 >= CPU_id.id > 75 and 230 >= GPU_id.id > 75:
+                return render_template('check_fps.html', result='Ваш пк реально тянет!'
+                                                                ' Вам гарантировано 60+ fps при разрешении FullHD ', data=setup)
+            if 230 <= CPU_id.id and 230 <= GPU_id.id:
+                return render_template('check_fps.html', result='Ваш пк ниже минимальных системных требований,'
+                                                                ' скорее всего игра будет нестабильна', data=setup)
+        elif game == 'PUBG: Battlegrounds':
+            if CPU_id.id <= 140 and GPU_id.id <= 140:
+                return render_template('check_fps.html', result='Ваш пк реально тянет!'
+                                                                ' Вам гарантировано 60+ fps при разрешении FullHD ', data=setup)
+            if 199 <= CPU_id.id and 199 <= GPU_id.id:
+                return render_template('check_fps.html', result='Ваш пк ниже минимальных системных требований,'
+                                                                ' скорее всего игра будет нестабильна', data=setup)
+        elif game == 'League of Legends':
+            if CPU_id.id <= 320 and GPU_id.id <= 320:
+                return render_template('check_fps.html', result='Ваш пк реально тянет!'
+                                                                ' Вам гарантировано 60+ fps при разрешении FullHD ', data=setup)
+            if 199 <= CPU_id.id and 199 <= GPU_id.id:
+                return render_template('check_fps.html', result='Ваш пк ниже минимальных системных требований,'
+                                                                ' скорее всего игра будет нестабильна', data=setup)
+        elif game == 'GTA 5':
+            if CPU_id.id <= 150 and GPU_id.id <= 150:
+                return render_template('check_fps.html', result='Ваш пк реально тянет!'
+                                                                ' Вам гарантировано 60+ fps при разрешении FullHD ', data=setup)
+            if 200 <= CPU_id.id and 200 <= GPU_id.id:
+                return render_template('check_fps.html', result='Ваш пк ниже минимальных системных требований,'
+                                                                ' скорее всего игра будет нестабильна', data=setup)
+    else:
+        return render_template('check_fps.html', data=setup)

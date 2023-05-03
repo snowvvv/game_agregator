@@ -1,0 +1,37 @@
+{% extends "new_base.html" %}
+
+{% block content %}
+<div style="margin-top: 50px">
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div class="notification">
+        {{ messages[0] }}
+    </div>
+{% endif %}
+{% endwith %}
+<div class="search-form">
+
+      <div style="color: #4185fb"><strong> {{data.title}} </strong></div>
+    <br>
+        <img src="{{ pic }}" width="400">
+    <br>
+    <div style="color: #41B7FB"> Описание:     {{data.description}}</div>
+    <br>
+        <div style="color: #41B7FB"> Игра - {{data.tag}}   </div>
+    <br>
+    <form method="POST" action="/info/{{data.id}}">
+
+        <br>
+        <br>
+    <h1 style="color: #41B7FB; font-size: 16px"> Понравился пост: {{data.responded_user}}</h1>
+
+    <br><br>
+        <input action="/info/{{data.id}}" value="Откликнуться" type=submit class="button-form">
+
+        <br><br>
+
+
+        </form>
+
+</div>
+{% endblock %}

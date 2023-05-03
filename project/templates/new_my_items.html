@@ -1,0 +1,36 @@
+{% extends "new_base.html" %}
+
+{% block content %}
+<h3>Мои посты</h3>
+<div>
+    <form class="search-form">
+       <p><input type="text" placeholder="Поиск по тегу" name="q" value="{{ request.args.get('q', '') }}">
+       <button type="submit" class="button-search">Найти</button></p>
+    </form>
+</div>
+<div class="post-box">
+    {% for el in data %}
+    <div class="post-border">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="product">
+                    <div class="image-post">
+                        <img src="/static/images/{{el.id}}.png" width=250 height=141>
+                    </div>
+                    <div class="info-post">
+                        <h4>{{ el.title }}</h4>
+
+                        <div class="post-bottom">
+                            <a href="/change/{{el.id}}" class="info-but">Редактировать</a>
+                            <a href="/delete/{{el.id}}" class="info-but">Удалить</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

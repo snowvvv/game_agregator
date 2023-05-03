@@ -11,17 +11,34 @@
     </div>
 {% endif %}
 {% endwith %}
-  <div class="box">
-      <img src=""
-  </div>
+
+<div>
+
+      <div><strong> {{data.title}} </strong></div>
+    <br>
+        <img src="{{pic}}">
+    <br>
+    <div> Описание:     {{data.description}}</div>
+    <br>
+        <div> Ключевые слова - {{data.tag}}   </div>
+    <br>
+    <form method="POST" action="/info/{{data.id}}">
+
+        <br>
+
+    <br><br>
+        <input action="/info/{{data.id}}" value="Откликнуться" type=submit class="button is-info">
+
+        <br><br>
+
+
+        </form>
+
+    <br>
+    <h1> Последний откликнувшийся: {{data.responded_user}}</h1>
+
+</div>
 
 
 
-
-
-
-
-
-
-        </div>
-        {% endblock %}
+{% endblock %} </div>

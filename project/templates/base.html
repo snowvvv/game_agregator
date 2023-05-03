@@ -50,14 +50,7 @@
                             </a>
                             {% endif %}
                             {% if not current_user.is_authenticated %}
-                            <a href="{{ url_for('auth.login') }}" class="navbar-item" style="
-
-/* blue */
-
-background: #41B7FB;
-border-radius: 8px;
-
-">
+                            <a href="{{ url_for('auth.login') }}" class="navbar-item">
                                 Войти
                             </a>
                             <a href="{{ url_for('auth.signup') }}" class="navbar-item">

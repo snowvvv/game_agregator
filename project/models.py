@@ -12,29 +12,23 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(1000), nullable=False)
     discord = db.Column(db.String(1000))
     steam = db.Column(db.String(1000))
-    items = db.relationship('Item', backref='user')
-
-
-class Item(db.Model):
-    """Данные об обьявлениях"""
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(500))
-    price = db.Column(db.Integer, nullable=False)
-    final_date = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    buyer = db.Column(db.String(100), nullable=True, default="Пока никому. Станьте первым!")
-
-    def __repr__(self):
-        # final_date = str(self.final_date)[:-3]
-        # final_date_from_timestamp = datetime.utcfromtimestamp(int(final_date))   из кодировки UNIX
-        return f'{self.id}'
+    items = db.relationship('Post', backref='user')
 
 
 class Post(db.Model):
+    """Данные о посте"""
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(500))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     tag = db.Column(db.String(50))
+    responded_user = db.Column(db.String(100), nullable=True, default="Пока никому. Станьте первым!")
+
+
+class Setup(db.Model):
+    """Данные об компьютере"""
+    id = db.Column(db.Integer, primary_key=True)
+    GPU = db.Column(db.String(500), nullable=False)
+    CPU = db.Column(db.String(500), nullable=False)
+    ram = db.Column(db.String(500))

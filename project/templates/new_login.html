@@ -1,0 +1,25 @@
+{% extends "new_base.html" %}
+
+{% block content %}
+<div style="margin-top: 150px">
+<h3>Вход</h3>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div class="notification">
+        {{ messages[0] }}
+    </div>
+{% endif %}
+{% endwith %}
+<div class="site-form">
+  <form method="POST" action="/login">
+    <div class="form-field">
+      <input class="form-input" type="email" name="email" placeholder="Ваш Email">
+    </div>
+    <div class="form-field">
+      <input class="form-input" type="password" name="password" placeholder="Ваш Пароль">
+    </div>
+    <button class="button-form">Войти</button>
+  </form>
+</div>
+</div>
+{% endblock %}

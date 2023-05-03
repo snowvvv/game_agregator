@@ -3,6 +3,10 @@
 {% block content %}
 <div class="column is-4 is-offset-4">
     <h3 class="title">Поиск напарников</h3>
+    <form>
+       <p><input type="text" placeholder="Поиск по тегу" name="q" value="{{ request.args.get('q', '') }}">
+       <button type="submit" class="button">Найти</button></p>
+    </form>
     <br>
 
         {% with messages = get_flashed_messages() %}
@@ -94,7 +98,6 @@
 
 
 
-
 {% for el in data %}
 
     <div class="product-item position-relative" >
@@ -109,32 +112,4 @@
      </div>
 
 {% endfor %}
-<form>
-   <p><input type="search" name="q" placeholder="Поиск по тегу">
-   <a class="button" href="/search-result/pubg">Найти</a></p>
-</form>
-
-
-   <!--{%for el in data %}
-              <a href="/offer/zoloto_56_proba_prekrasnejshie_sergi_s_nebesno_goluboj_prirodnoj_birjuzoj_ves_5_26_gramm-i224689509794582.html" class="carousel__item__photo ">
-                    <div class="mainpage_offer_photo_container">
-                        <img src="/static/images/chirik.jpg" width="100" height="100" alt="Фото">
-                    </div>
-                </a>
-
-                <a href="/offer/zoloto_56_proba_prekrasnejshie_sergi_s_nebesno_goluboj_prirodnoj_birjuzoj_ves_5_26_gramm-i224689509794582.html" class="carousel__item__title">
-                    <strong><div class="title_box">{{ el.title }}</div></strong>
-                </a>
-
-                <span class="carousel__item__sub">
-                <span class="carousel__item__small"></span>
-                <span class="carousel__item__price">
-                {{ el.price }}<span class="rouble"> RUB</span>        </span>
-                </span>
-                        <a href ='' class="button button-large button-block button-outline-primary"> Информация о товаре</a>
-
-            {% endfor %}
-
-       </div></div>-->
-
 {% endblock %}

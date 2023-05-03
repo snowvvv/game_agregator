@@ -10,7 +10,7 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login')
 def login():
-    return render_template('login.html')
+    return render_template('new_login.html')
 
 
 @auth.route('/login', methods=['POST'])
@@ -24,17 +24,17 @@ def login_post():
     # check if the user actually exists
     # Хэширование пароля и сравнение с хэшированным паролем из дб
     if not user or not check_password_hash(user.password, password) or email is None or password is None:
-        flash('Пожалуйста проверьте введенные данные и попробуйте снова)')
+        flash('Пожалуйста проверьте введенные данные и попробуйте снова')
         return redirect(url_for('auth.login'))  # Если юзера нет или пароль неверный - перезагрузка страницы
 
     # Если проверка проходит,  значит введенные данные верны
     login_user(user, remember=True)
-    return redirect(url_for('main.profile'))
+    return redirect(url_for('main.index'))
 
 
 @auth.route('/signup', methods=['GET'])
 def signup():
-    return render_template('signup.html')
+    return render_template('new_signup.html')
 
 
 @auth.route('/signup', methods=['POST'])
